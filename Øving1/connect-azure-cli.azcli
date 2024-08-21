@@ -1,0 +1,9 @@
+az login --service-principal --username b0a98737-1765-46a8-bb69-3b77fb70fc28 --password YFt8Q~c1_aojZDNlE5q7U5y4-mEUX36fUHpF2c6n --tenant cc9de1cc-5867-4904-80ba-7b55a098b42f
+
+{
+  "appId": "b0a98737-1765-46a8-bb69-3b77fb70fc28",
+  "displayName": "azure-cli-2024-08-21-11-52-06",
+  "password": "YFt8Q~c1_aojZDNlE5q7U5y4-mEUX36fUHpF2c6n",
+  "tenant": "cc9de1cc-5867-4904-80ba-7b55a098b42f"
+}
+# az docs: https://learn.microsoft.com/en-us/cli/azure/reference-index?view=azure-cli-latest
