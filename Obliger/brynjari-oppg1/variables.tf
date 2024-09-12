@@ -18,6 +18,15 @@ variable "project_owner" {
   type = string
   description = "Owner of the project"
 }
+variable "environment" {
+  type = string
+  description = "The environment type of the resources."
+
+  validation {
+    condition     = contains(["prod", "test"], var.environment)
+    error_message = "Valid values for var: environment are (prod, test)."
+  } 
+}
 variable "vm_sizes" {
   type = list(string)
   description = "Aliases tied to actual VM size codes"
