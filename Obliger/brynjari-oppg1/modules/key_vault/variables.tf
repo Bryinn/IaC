@@ -67,19 +67,14 @@ variable "key_ops" {
   default = null
   description = "Options for the keys generated(decrypt, encrypt, sign, unwrapKey, verify, wrapKey)."
     
-  validation {
-      condition     = contains(["decrypt", "encrypt", "sign", "unwrapKey", "verify", "wrapKey",], var.key_ops)
-      error_message = "Valid values for var: sku_name are (decrypt, encrypt, sign, unwrapKey, verify, wrapKey)."
-  } 
+  #validation {
+  #    condition     = contains(["decrypt", "encrypt", "sign", "unwrapKey", "verify", "wrapKey"], var.key_ops)
+  #    error_message = "Valid values for var: key_ops are (decrypt, encrypt, sign, unwrapKey, verify, wrapKey)."
+  #} 
 }
 variable "secrets" {
   type = map(string)
   default = null
   description = "Username mapped to secrets in the keyvault."
-}
-variable "storage_account_id" {
-  type = set(string)
-  default = null
-  description = "IDS of all storage accounts with need for customer managed keys"
 }
 

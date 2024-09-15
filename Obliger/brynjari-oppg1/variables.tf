@@ -28,9 +28,8 @@ variable "environment" {
   } 
 }
 variable "vm_sizes" {
-  type = list(string)
+  type = map(string)
   description = "Aliases tied to actual VM size codes"
-  default = [ "small", "medium", "large", "huge" ]
 }
 variable "regions" {
   type = list(string)

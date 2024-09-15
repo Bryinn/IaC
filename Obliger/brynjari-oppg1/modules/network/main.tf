@@ -10,6 +10,7 @@ resource "azurerm_network_security_group" "nsg" {
   location            = azurerm_resource_group.rg-nsg.location
   resource_group_name = azurerm_resource_group.rg-nsg.name
   tags = var.common_tags
+  
 }
 
 resource "azurerm_virtual_network" "vn" {
@@ -21,7 +22,7 @@ resource "azurerm_virtual_network" "vn" {
   
   tags = var.common_tags
 }
-
+ 
 resource "azurerm_subnet" "subnets" {
   for_each = var.sub_address_space
   name = "sub_vn_${each.key}_${lower(var.resource_name)}_${var.name_conv}"
@@ -32,5 +33,5 @@ resource "azurerm_subnet" "subnets" {
 
 # output subnet id
 output "subnet_ouput" {
-    value = values(azurerm_subnet.subnets).id
+    value = values(azurerm_subnet.subnets)
   }

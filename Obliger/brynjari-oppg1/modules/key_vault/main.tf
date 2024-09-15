@@ -19,7 +19,7 @@ resource "azurerm_key_vault" "kv" {
 
   access_policy {
     tenant_id = data.azurerm_client_config.current.tenant_id
-
+    object_id = data.azurerm_client_config.current.object_id
         key_permissions = [
       "Create",
       "Get",
@@ -40,12 +40,14 @@ resource "azurerm_key_vault" "kv" {
   tags = var.common_tags
 }
 
-resource "azurerm_key_vault_secret" "name" {
+resource "azurerm_key_vault_secret" "secrets" {
   for_each = var.secrets
 
   name = each.key
   value = each.value
   key_vault_id = azurerm_key_vault.kv.id
+
+  tags = var.common_tags
 }
 
 resource "azurerm_key_vault_key" "key" {
@@ -53,7 +55,7 @@ resource "azurerm_key_vault_key" "key" {
 
   name = each.value
   key_vault_id = azurerm_key_vault.kv.id
-  key_type     = var.key_type
+  key_type     = upper(var.key_type)
   key_size     = var.key_size
   key_opts     = var.key_ops
 
@@ -65,19 +67,20 @@ resource "azurerm_key_vault_key" "key" {
     expire_after         = "P90D"
     notify_before_expiry = "P29D"
   }
+  tags = var.common_tags
 }
 #data "azurerm_" "name" {
 #  
 #}
-resource "azurerm_storage_account_customer_managed_key" "sa_cmk" {
-  for_each = var.storage_account_id
-
-  storage_account_id = each.value
-  key_vault_id       = azurerm_key_vault.kv.id
-  key_name           = azurerm_key_vault_key.kv.name
-}
-
 # output keyvault id
 output "kv_output" {
     value = azurerm_key_vault.kv.id
   }
+
+output "kv_ouput_keys" {
+    value = values(azurerm_key_vault_key.key)
+  }
+
+output "kv_output_secrets" {
+  value = values(azurerm_key_vault_secret.secrets)
+}

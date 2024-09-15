@@ -22,13 +22,29 @@ module "network" {
   location = var.location
   address_space = ["10.0.0.0/16"]
   sub_address_space = {
-    webapp = ["10.0.0.1/24", "10.0.0.2/24"]
-    honeypot = ["10.0.0.3/24"]
+    webapp = ["10.0.1.0/24", "10.0.2.0/24"]
+    honeypot = ["10.0.3.0/24"]
   }
   dns_servers = ["10.0.0.5"]
   common_tags = local.common_tags
   name_conv = local.name_conv
   resource_name = "webapp"
+}
+
+module "key_vault" {
+  source = "./modules/key_vault"
+  location = var.location
+  resource_name = "webapp"
+  common_tags = local.common_tags
+  name_conv = local.name_conv
+  project = var.project
+  key_name = [ "sa-access-key" ] # first key is sa-access-key
+  key_ops = [ "encrypt", "verify", "sign", "decrypt" ]
+  key_size = 4096
+  key_type = "rsa"
+  secrets = {
+    Brynjari = "123123heihei"
+  }
 }
 
 module "storage_account" {
@@ -41,23 +57,17 @@ module "storage_account" {
   name_conv = local.name_conv
   resource_name = "webapp"
   project = var.project
-  #sa_key = 
+  sa_key = module.key_vault.kv_ouput_keys[0].id # first key is sa-access-key
 }
 
-module "key_vault" {
-  source = "./modules/key_vault"
+module "VM" {
+  source = "./modules/virtual_machine"
   location = var.location
-  resource_name = "webapp"
+  vm_names = [ "webapp" ]
+  vm_sizes = [ var.vm_sizes.medium ]
+  network_interface_ids = [ module.network.subnet_ouput[0].id ]
+  secrets = [ module.key_vault.kv_output_secrets[0] ]
+
   common_tags = local.common_tags
   name_conv = local.name_conv
-  project = var.project
-  key_name = [ "sa_access_key" ]
-  key_ops = [ "encrypt", "verify", "sign", "decrypt" ]
-  key_size = 4096
-  key_type = "rsa"
-  secrets = {
-    Brynjari = "123123heihei"
-  }
-  storage_account_id = "${module.storage_account.sa_id}"
 }
-

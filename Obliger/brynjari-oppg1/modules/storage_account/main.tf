@@ -6,12 +6,16 @@ resource "azurerm_resource_group" "rg_sa" {
 
 resource "azurerm_storage_account" "sa" {
   count = var.sa_instances
+  
   name = "${lower(var.project)}${lower(var.resource_name)}${count.index+1}"
   resource_group_name = azurerm_resource_group.rg_sa.name
   location = azurerm_resource_group.rg_sa.location
   account_tier = "Standard"
   account_replication_type = var.replication_type
   tags = var.common_tags
+  customer_managed_key {
+    user_assigned_identity_id = var.sa_key # since we are using count, we can pass a list instead and have a different key for each SA
+  }
   
 }
 
@@ -30,5 +34,5 @@ resource "azurerm_storage_container" "sc" {
 #    value = azurerm_storage_account.sa.primary_connection_string
 #  }
 output "sa_id" {
-    value = values(azurerm_storage_account.sa).id
+    value = azurerm_storage_account.sa
   }
