@@ -13,15 +13,13 @@ resource "azurerm_storage_account" "sa" {
   account_tier = "Standard"
   account_replication_type = var.replication_type
   tags = var.common_tags
-  customer_managed_key {
-    user_assigned_identity_id = var.sa_key # since we are using count, we can pass a list instead and have a different key for each SA
-  }
-  
+
 }
 
 # storage countainers created for every storage account
 resource "azurerm_storage_container" "sc" {
   depends_on = [ azurerm_storage_account.sa ]
+
   count = var.sa_instances
   name                  = "sc-${lower(var.project)}-${lower(var.resource_name)}-${count.index+1}"
   storage_account_name  = "${lower(var.project)}${lower(var.resource_name)}${count.index+1}"
@@ -33,6 +31,9 @@ resource "azurerm_storage_container" "sc" {
 #output "sa_connection_string" {
 #    value = azurerm_storage_account.sa.primary_connection_string
 #  }
-output "sa_id" {
-    value = azurerm_storage_account.sa
+output "sa_names" {
+    value = [for sa in azurerm_storage_account.sa : sa.name]
   }
+output "primary_access_keys" {
+  value = [for sa in azurerm_storage_account.sa : sa.primary_access_key]
+}

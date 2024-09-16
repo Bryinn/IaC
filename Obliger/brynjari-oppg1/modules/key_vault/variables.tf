@@ -77,4 +77,11 @@ variable "secrets" {
   default = null
   description = "Username mapped to secrets in the keyvault."
 }
-
+ variable "sa_keys_as_secrets" {
+  default = null
+  type = list(string)
+ }
+  variable "sa_names" {
+  default = null
+  type = list(string)
+ }

@@ -23,8 +23,8 @@ variable "vm_sizes" {
   type = list(string)
   description = "Sizes for all the vms. The order is mapped to the names, correct order is significant."
 }
-variable "network_interface_ids" {
-  type = list(string)
+variable "subnet_id" {
+  type = string
   description = "Network interfaces for all the vms. The order is mapped to the names, correct order is significant."
 }
 variable "secrets" {

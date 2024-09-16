@@ -20,9 +20,15 @@ resource "azurerm_key_vault" "kv" {
   access_policy {
     tenant_id = data.azurerm_client_config.current.tenant_id
     object_id = data.azurerm_client_config.current.object_id
-        key_permissions = [
+    key_permissions = [
       "Create",
+      "Delete",
       "Get",
+      "Purge",
+      "Recover",
+      "Update",
+      "GetRotationPolicy",
+      "SetRotationPolicy"
     ]
 
     secret_permissions = [
@@ -45,6 +51,16 @@ resource "azurerm_key_vault_secret" "secrets" {
 
   name = each.key
   value = each.value
+  key_vault_id = azurerm_key_vault.kv.id
+
+  tags = var.common_tags
+}
+
+resource "azurerm_key_vault_secret" "sa_key_as_secrets" {
+  count = length(var.sa_keys_as_secrets)
+
+  name = "${var.sa_names[count.index]}-primary-key"
+  value = var.sa_keys_as_secrets[count.index]
   key_vault_id = azurerm_key_vault.kv.id
 
   tags = var.common_tags

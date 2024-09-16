@@ -1,3 +1,4 @@
+data "azurerm_client_config" "current" {}
 
 resource "azurerm_resource_group" "rg-nsg" {
   name = "rg_nsg_${lower(var.resource_name)}_${var.name_conv}"
@@ -24,14 +25,15 @@ resource "azurerm_virtual_network" "vn" {
 }
  
 resource "azurerm_subnet" "subnets" {
-  for_each = var.sub_address_space
-  name = "sub_vn_${each.key}_${lower(var.resource_name)}_${var.name_conv}"
+  count = length(var.sub_address_space)
+  name = "sub_vn_${var.sub_address_space_names[count.index]}_${lower(var.resource_name)}_${var.name_conv}"
   resource_group_name = azurerm_resource_group.rg-nsg.name
   virtual_network_name = azurerm_virtual_network.vn.name
-  address_prefixes = each.value
+  address_prefixes = var.sub_address_space[count.index]
 }
 
 # output subnet id
 output "subnet_ouput" {
-    value = values(azurerm_subnet.subnets)
+    value = azurerm_subnet.subnets
   }
+

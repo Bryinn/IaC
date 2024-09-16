@@ -28,6 +28,10 @@ variable "address_space" {
   description = "IP addresses of address spaces for the network."
 }
 variable "sub_address_space" {
-  type = map(list(string))
-  description = "Map keys cannot contain numbers. IP addresses of address spaces for the subnet. The key of the map will be an additional name on the resource. Every address space will be its own subnet. You can thus define multiple subnets with the same classification(or name)."
+  type = list(list(string))
+  description = "IP addresses of address spaces for the subnet. The key of the map will be an additional name on the resource. Every address space will be its own subnet."
+}
+variable "sub_address_space_names" {
+  type = list(string)
+  description = "Names for the subnets"
 }

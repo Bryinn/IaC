@@ -45,8 +45,4 @@ variable sc_access_type {
     error_message = "Valid values for var: sc_access_type are (private, blob, container)."
   } 
 }
-variable "sa_key" {
-  type = string
-  default = null
-  description = "Access key for all the storage accounts."
-}
+
