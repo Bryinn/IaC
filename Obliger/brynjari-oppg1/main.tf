@@ -25,12 +25,12 @@ module "network" {
     ["10.0.1.0/24", "10.0.2.0/24"],
     ["10.0.3.0/24"]
   ]
-  sub_address_space_names = ["webapp", "honeypot"]
+  sub_address_space_names = ["test", "testhoneypot"]
 
   dns_servers = ["10.0.0.5"]
   common_tags = local.common_tags
   name_conv = local.name_conv
-  resource_name = "webapp"
+  resource_name = "test"
 }
 
 module "storage_account" {
@@ -41,14 +41,14 @@ module "storage_account" {
   sc_access_type = "private"
   common_tags = local.common_tags
   name_conv = local.name_conv
-  resource_name = "webapp"
+  resource_name = "test"
   project = var.project
 }
 
 module "key_vault" {
   source = "./modules/key_vault"
   location = var.location
-  resource_name = "webapp"
+  resource_name = "test"
   common_tags = local.common_tags
   name_conv = local.name_conv
   project = var.project
@@ -57,7 +57,7 @@ module "key_vault" {
   key_size = 4096
   key_type = "rsa"
   secrets = {
-    Brynjari = "123123heihei!!!"
+    fdoblig1 = "123123heihei!!!"
   }
   sa_keys_as_secrets = module.storage_account.primary_access_keys
   sa_names = module.storage_account.sa_names
@@ -66,7 +66,7 @@ module "key_vault" {
 module "VM" {
   source = "./modules/virtual_machine"
   location = var.location
-  vm_names = [ "webapp" ]
+  vm_names = [ "test" ]
   vm_sizes = [ var.vm_sizes.medium ]
   subnet_id = module.network.subnet_ouput[0].id
   secrets = [ module.key_vault.kv_output_secrets[0] ]

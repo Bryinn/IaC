@@ -45,7 +45,3 @@ resource "azurerm_linux_virtual_machine" "linux_vm" {
     
   }
 } 
-
-output "vm_ip_addresse" {
-  value = [for vm in azurerm_linux_virtual_machine.linux_vm : linux_vm.private_ip_address]
-}
