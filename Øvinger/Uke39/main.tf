@@ -9,7 +9,7 @@ terraform {
     resource_group_name = "rg_bry_backend"
     storage_account_name = "sabrybackend"
     container_name = "sc-sa-backend"
-    key = "access-key-sa"
+    key = "web.terraform.tfstate"
   }
 }
 
@@ -21,5 +21,14 @@ provider "azurerm" {
 module "backend" {
   source = "./backend"
   
+}
+
+module "web" {
+  source = "./modules/web"
+  location = "westeurope"
+}
+
+output "web-endpoint" {
+  value = module.web.primary_web_endpoint  
 }
 
