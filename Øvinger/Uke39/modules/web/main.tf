@@ -1,7 +1,7 @@
 locals {
   app = "web"
-  rg_name = "${var.rg_name}-${locals.web}"
-  sa_name = "${var.sa_name}-${locals.web}"
+  rg_name = "${var.rg_name}-${locals.app}"
+  sa_name = "${var.sa_name}-${locals.app}"
 
   web_suffix = "<h1>${terraform.workspace}<h1/>"
 }
