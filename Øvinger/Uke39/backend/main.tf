@@ -53,7 +53,7 @@ resource "azurerm_key_vault" "kv" {
 }
 
 resource "azurerm_key_vault_secret" "sa_backend_accesskey" {
-  name = "web.terraform.tfstate"
+  name = "web-terraform-tfstate"
   value = azurerm_storage_account.sa.primary_access_key
   key_vault_id = azurerm_key_vault.kv.id
 }
