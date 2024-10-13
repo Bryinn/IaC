@@ -8,6 +8,7 @@ locals {
 
 resource "random_string" "random_string" {
   length = 9
+  special = false
 }
 
 resource "azurerm_resource_group" "rg_web" {
