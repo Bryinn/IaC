@@ -1,13 +1,13 @@
 variable "rg_name" {
   type = string
-  default = "rg-web"
+  default = "rg-bry"
 }
 variable "location" {
   type = string
 }
 variable "sa_name" {
   type = string
-  default = "saweb"
+  default = "sabry"
 }
 variable "source_content" {
   type = string
