@@ -15,7 +15,7 @@ resource "azurerm_resource_group" "rg_web" {
   location = var.location
 }
 resource "azurerm_storage_account" "sa_web" {
-  name = "${lower(local.sa_name)}${lower(random_string.random_string)}"
+  name = "${lower(local.sa_name)}${lower(random_string.random_string.result)}"
   resource_group_name = azurerm_resource_group.rg_web.name
   location = azurerm_resource_group.rg_web.location
   account_tier = "Standard"
