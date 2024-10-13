@@ -18,10 +18,10 @@ provider "azurerm" {
   features {}
 }
 
-module "backend" {
-  source = "./backend"
+#module "backend" {
+#  source = "./backend"
   
-}
+#}
 
 module "web" {
   source = "./modules/web"
