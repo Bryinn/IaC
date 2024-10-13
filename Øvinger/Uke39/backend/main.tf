@@ -2,12 +2,12 @@ data "azurerm_client_config" "current" {}
 
 
 resource "azurerm_resource_group" "rg_sa" {
-  name = "rg_bry_backend"
+  name = "rg_bryu39_backend"
   location = "norwayeast"
 }
 
 resource "azurerm_storage_account" "sa" {  
-  name = "sabrybackend"
+  name = "sabryu39backend"
   resource_group_name = azurerm_resource_group.rg_sa.name
   location = azurerm_resource_group.rg_sa.location
   account_tier = "Standard"
