@@ -1,6 +1,6 @@
 variable "rg_name" {
   type = string
-  default = "rg-bry"
+  default = "rg-bry-test"
 }
 variable "location" {
   type = string
