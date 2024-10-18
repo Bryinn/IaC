@@ -19,8 +19,8 @@ env:
   ARM_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
   WORKING_DIR: ./Obliger/brynjari-oppg2/terraform
 
-jobs:
-  on-success:
+on-success:
+  jobs:
     dev_stage:
       runs-on: ubuntu-latest
       environment: dev
@@ -44,7 +44,6 @@ jobs:
           run: curl $(terraform output -raw primary_web_endpoint)
           working-directory: ${{ env.WORKING_DIR }}
           
-  on-success:
     stage_prod:
       runs-on: ubuntu-latest
       environment: stage
@@ -67,7 +66,7 @@ jobs:
         - name: Test stage
           run: curl $(terraform output -raw primary_web_endpoint)
           working-directory: ${{ env.WORKING_DIR }}
-  on-success:
+
     prod:
       needs: stage_prod
       runs-on: ubuntu-latest
