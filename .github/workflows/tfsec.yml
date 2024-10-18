@@ -26,11 +26,11 @@ jobs:
 
       - name: Run tfsec
         uses: aquasecurity/tfsec-sarif-action@21ded20e8ca120cd9d3d6ab04ef746477542a608
-        with:
-          sarif_file: tfsec.sarif
+        #with:
+          #sarif_file: tfsec.sarif
 
-      - name: Upload SARIF file
-        uses: github/codeql-action/upload-sarif@v3
-        with:
+     # - name: Upload SARIF file
+     #   uses: github/codeql-action/upload-sarif@v3
+     #   with:
           # Path to SARIF file relative to the root of the repository
-          sarif_file: tfsec.sarif
+     #     sarif_file: tfsec.sarif
