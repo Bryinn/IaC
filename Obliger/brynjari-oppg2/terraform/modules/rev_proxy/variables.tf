@@ -1,8 +1,9 @@
-variable "sa_name" {
+variable "instance_name" {
   type = string
-  default = "websa"
+}
+variable "location" {
+  type = string
 }
 variable "rg_name" {
   type = string
-  default = "webrg"
 }
