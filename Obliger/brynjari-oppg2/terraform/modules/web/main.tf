@@ -12,8 +12,20 @@ resource "azurerm_linux_web_app" "webapp" {
   resource_group_name   = var.rg_name
   service_plan_id       = azurerm_service_plan.sp_web.id
   https_only            = true
+  storage_account {
+    name = local.abs_sa_name
+    access_key = var.storage_account_details.access_key
+    account_name = var.storage_account_details.account_name
+    share_name = var.storage_account_details.share_name
+    type = var.storage_account_details.type
+  }
   site_config { 
     minimum_tls_version = "1.2"
+  }
+  connection_string {
+    name = local.connection_string_name
+    type = var.db_connection_string.type
+    value = var.db_connection_string.value
   }
 }
 
