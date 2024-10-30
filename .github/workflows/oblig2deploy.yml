@@ -10,7 +10,7 @@ env:
   ARM_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
   ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
   ARM_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
-  WORKING_DIR: ./Obliger/brynjari-oppg2/terraform/web_application # Could use matrix to create a list of direcotries here for each stack. 
+  WORKING_DIR: ./Obliger/brynjari-oppg2/terraform  # web_application # Could use matrix to create a list of direcotries here for each stack. 
 
 jobs:
   tfsec:
@@ -23,6 +23,9 @@ jobs:
       - name: tfsec
         uses: aquasecurity/tfsec-action@v1.0.0
   dev_stage:
+    strategy:
+      matrix:
+        deployed_stacks: [web_application, global]
     runs-on: ubuntu-latest
     environment: dev
     steps:
@@ -31,20 +34,23 @@ jobs:
   
       - name: Terraform init
         run: terraform init
-        working-directory: ${{ env.WORKING_DIR }}
+        working-directory: ${{ env.WORKING_DIR }}/${{ matrix.deployed_stacks }}
         
       - name: Terraform workspace select or create dev
         run: terraform workspace select dev || terraform workspace new dev
-        working-directory: ${{ env.WORKING_DIR }}
+        working-directory: ${{ env.WORKING_DIR }}/${{ matrix.deployed_stacks }}
   
       - name: Terraform apply dev
         run: terraform apply -auto-approve
-        working-directory: ${{ env.WORKING_DIR }}
+        working-directory: ${{ env.WORKING_DIR }}/${{ matrix.deployed_stacks }}
   
       - name: Test dev
         run: curl $(terraform output -raw primary_web_endpoint)
-        working-directory: ${{ env.WORKING_DIR }}
+        working-directory: ${{ env.WORKING_DIR }}/${{ matrix.deployed_stacks }}
   stage_prod:
+    strategy:
+        matrix:
+          deployed_stacks: [web_application, global]
     needs: tfsec
     runs-on: ubuntu-latest
     environment: stage
@@ -54,21 +60,24 @@ jobs:
   
       - name: Terraform init
         run: terraform init
-        working-directory: ${{ env.WORKING_DIR }}
+        working-directory: ${{ env.WORKING_DIR }}/${{ matrix.deployed_stacks }}
         
       - name: Terraform workspace select or create stage
         run: terraform workspace select ${{ vars.ENV }} || terraform workspace new ${{ vars.ENV }}
-        working-directory: ${{ env.WORKING_DIR }}
+        working-directory: ${{ env.WORKING_DIR }}/${{ matrix.deployed_stacks }}
   
       - name: Terraform apply stage
         run: terraform apply -auto-approve
-        working-directory: ${{ env.WORKING_DIR }}
+        working-directory: ${{ env.WORKING_DIR }}/${{ matrix.deployed_stacks }}
   
       - name: Test stage
         run: curl $(terraform output -raw primary_web_endpoint)
-        working-directory: ${{ env.WORKING_DIR }}
+        working-directory: ${{ env.WORKING_DIR }}/${{ matrix.deployed_stacks }}
   
   prod:
+    strategy:
+        matrix:
+          deployed_stacks: [web_application, global]
     needs: stage_prod
     runs-on: ubuntu-latest
     environment:
@@ -80,24 +89,24 @@ jobs:
   
       - name: Terraform init
         run: terraform init
-        working-directory: ${{ env.WORKING_DIR }}
+        working-directory: ${{ env.WORKING_DIR }}/${{ matrix.deployed_stacks }}
         
       - name: Terraform workspace select or create prod
         run: terraform workspace select ${{ vars.ENV }} || terraform workspace new ${{ vars.ENV }}
-        working-directory: ${{ env.WORKING_DIR }}
+        working-directory: ${{ env.WORKING_DIR }}/${{ matrix.deployed_stacks }}
   
       - name: Terraform apply prod
         run: terraform apply -auto-approve
-        working-directory: ${{ env.WORKING_DIR }}
+        working-directory: ${{ env.WORKING_DIR }}/${{ matrix.deployed_stacks }}
   
       - name: Test prod
         run: curl $(terraform output -raw primary_web_endpoint)
-        working-directory: ${{ env.WORKING_DIR }}
+        working-directory: ${{ env.WORKING_DIR }}/${{ matrix.deployed_stacks }}
   
       - name: Get Web Endpoint
         id: get_web_endpoint
-        run: echo "WEB_ENDPOINT=$(terraform output -raw primary_web_endpoint)"
-        working-directory: ${{ env.WORKING_DIR }}
+        run: echo "WEB_ENDPOINT=$(terraform output -raw ${{primary_web_endpoint}})"
+        working-directory: ${{ env.WORKING_DIR }}/${{ matrix.deployed_stacks }}
   
   
 
