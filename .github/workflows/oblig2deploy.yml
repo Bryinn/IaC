@@ -39,7 +39,15 @@ jobs:
       - name: Terraform workspace select or create dev
         run: terraform workspace select dev || terraform workspace new dev
         working-directory: ${{ env.WORKING_DIR }}/${{ matrix.deployed_stacks }}
-  
+
+      - name: Terraform fmt
+        run: terraform fmt
+        working-directory: ${{ env.WORKING_DIR }}/${{ matrix.deployed_stacks }}
+
+      - name: Terraform validate
+        run: terraform validate
+        working-directory: ${{ env.WORKING_DIR }}/${{ matrix.deployed_stacks }}
+        
       - name: Terraform apply dev
         run: terraform apply -auto-approve
         working-directory: ${{ env.WORKING_DIR }}/${{ matrix.deployed_stacks }}
@@ -64,6 +72,14 @@ jobs:
         
       - name: Terraform workspace select or create stage
         run: terraform workspace select ${{ vars.ENV }} || terraform workspace new ${{ vars.ENV }}
+        working-directory: ${{ env.WORKING_DIR }}/${{ matrix.deployed_stacks }}
+
+      - name: Terraform fmt
+        run: terraform fmt
+        working-directory: ${{ env.WORKING_DIR }}/${{ matrix.deployed_stacks }}
+
+      - name: Terraform validate
+        run: terraform validate
         working-directory: ${{ env.WORKING_DIR }}/${{ matrix.deployed_stacks }}
   
       - name: Terraform apply stage
@@ -93,6 +109,14 @@ jobs:
         
       - name: Terraform workspace select or create prod
         run: terraform workspace select ${{ vars.ENV }} || terraform workspace new ${{ vars.ENV }}
+        working-directory: ${{ env.WORKING_DIR }}/${{ matrix.deployed_stacks }}
+
+      - name: Terraform fmt
+        run: terraform fmt
+        working-directory: ${{ env.WORKING_DIR }}/${{ matrix.deployed_stacks }}
+
+      - name: Terraform validate
+        run: terraform validate
         working-directory: ${{ env.WORKING_DIR }}/${{ matrix.deployed_stacks }}
   
       - name: Terraform apply prod
