@@ -1,7 +1,7 @@
 locals {
   workspace_suffix = terraform.workspace == "default" ? "" : "${terraform.workspace}"
 
-  rg_name = terraform.workspace == "default" ? "${var.rg_name}" : "${var.rg_name}-${local.workspace_suffix}"
-  sa_name = "${var.sa_name}${local.workspace_suffix}"
-  
+  sa_name   = "${var.sa_name}${var.instance_name}${local.workspace_suffix}"
+  sc_name   = "sc_${var.instance_name}_${local.workspace_suffix}"
+  blob_name = "blob_${var.instance_name}_${local.workspace_suffix}"
 }

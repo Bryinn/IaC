@@ -3,10 +3,11 @@ resource "azurerm_public_ip" "lb_ip" {
   location            = var.location
   resource_group_name = var.rg_name
   allocation_method   = "Static"
+  tags                = var.common_tags
 }
 
 resource "azurerm_lb" "lb" {
-  name                = "${local.lb_name}"
+  name                = local.lb_name
   location            = var.location
   resource_group_name = var.rg_name
 
@@ -14,14 +15,15 @@ resource "azurerm_lb" "lb" {
     name                 = azurerm_public_ip.lb_ip.name
     public_ip_address_id = azurerm_public_ip.lb_ip.id
   }
+  tags = var.common_tags
 }
 
 resource "azurerm_lb_rule" "lb_backend" {
-  name = "${azurerm_lb.lb.name}-rule"
-  loadbalancer_id = azurerm_lb.lb.id
-  protocol = "Tcp"
-  frontend_port = 80
-  backend_port = 80
+  name                           = "${azurerm_lb.lb.name}-rule"
+  loadbalancer_id                = azurerm_lb.lb.id
+  protocol                       = "Tcp"
+  frontend_port                  = 80
+  backend_port                   = 80
   frontend_ip_configuration_name = azurerm_public_ip.lb_ip.name
   # backend_address_pool_ids = 
 }

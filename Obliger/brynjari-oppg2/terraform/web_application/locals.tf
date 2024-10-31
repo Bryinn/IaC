@@ -1,6 +1,6 @@
 locals {
   workspace_suffix = terraform.workspace == "default" ? "" : "${terraform.workspace}"
 
-  lb_name = "${var.instance_name}-lb-${local.workspace_suffix}"
-
+  rg_name = "${var.rg_name}-${local.workspace_suffix}"
+  
 }

@@ -6,9 +6,9 @@ variable "rg_name" {
   type        = string
   description = "Resource group name used for all the resources in this module"
 }
-variable "instance_name" {
+variable "common_instance_name" {
   type        = string
-  description = "Naming used in all resources in this module"
+  description = "Descriptive name used in every module to describe the purpose or of which kind of stack the resource belongs to."
 }
 variable "common_tags" {
   type = object({
@@ -16,4 +16,8 @@ variable "common_tags" {
     owner        = string
     billing_code = string
   })
+}
+variable "expiration_date" {
+  type        = string
+  description = "Expiration date of access keyfor key vault"
 }
