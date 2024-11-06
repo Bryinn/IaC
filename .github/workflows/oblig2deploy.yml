@@ -11,7 +11,7 @@ env:
   ARM_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
   ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
   ARM_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
-  WORKING_DIR: ./Obliger/brynjari-oppg2/terraform  # web_application # Could use matrix to create a list of direcotries here for each stack. 
+  WORKING_DIR: ./Obliger/brynjari-oppg2/terraform  # web_application 
 
 jobs:
   tfsec:
@@ -26,7 +26,7 @@ jobs:
   dev_stage:
     strategy:
       matrix:
-        deployed_stacks: [web_application, global]
+        deployed_stacks: [web_application]
     runs-on: ubuntu-latest
     environment: dev
     steps:
@@ -50,7 +50,7 @@ jobs:
         working-directory: ${{ env.WORKING_DIR }}/${{ matrix.deployed_stacks }}
         
       - name: Terraform apply dev
-        run: terraform apply -auto-approve -var "${{ var1 }}" -var "${{ var2 }}" -var "${{ var3 }}" -var "${{ var4 }}"
+        run: terraform apply -auto-approve -var "${{ var1 }}" -var "${{ var2 }}" -var "${{ var3 }}" -var "${{ var4 }}" -var "${{ var5 }}"
         working-directory: ${{ env.WORKING_DIR }}/${{ matrix.deployed_stacks }}
   
       - name: Test dev
@@ -84,7 +84,7 @@ jobs:
         working-directory: ${{ env.WORKING_DIR }}/${{ matrix.deployed_stacks }}
   
       - name: Terraform apply stage
-        run: terraform apply -auto-approve -var "${{ var1 }}" -var "${{ var2 }}" -var "${{ var3 }}" -var "${{ var4 }}"
+        run: terraform apply -auto-approve -var "${{ var1 }}" -var "${{ var2 }}" -var "${{ var3 }}" -var "${{ var4 }}" -var "${{ var5 }}"
         working-directory: ${{ env.WORKING_DIR }}/${{ matrix.deployed_stacks }}
   
       - name: Test stage
@@ -121,7 +121,7 @@ jobs:
         working-directory: ${{ env.WORKING_DIR }}/${{ matrix.deployed_stacks }}
   
       - name: Terraform apply prod
-        run: terraform apply -auto-approve -var "${{ var1 }}" -var "${{ var2 }}" -var "${{ var3 }}" -var "${{ var4 }}"
+        run: terraform apply -auto-approve -var "${{ var1 }}" -var "${{ var2 }}" -var "${{ var3 }}" -var "${{ var4 }}" -var "${{ var5 }}"
         working-directory: ${{ env.WORKING_DIR }}/${{ matrix.deployed_stacks }}
   
       - name: Test prod
