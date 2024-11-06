@@ -37,7 +37,7 @@ resource "azurerm_linux_web_app" "webapp" {
 
 #resource "azurerm_source_control_token" "example" {
 #  type  = "GitHub"
-#  token = "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"
+#  token = "x"
 #}
 
 #resource "azurerm_app_service_source_control" "sourcecontrol" {

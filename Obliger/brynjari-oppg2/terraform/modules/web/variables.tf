@@ -12,7 +12,7 @@ variable "instance_name" {
 }
 #variable "repo_url" {
 #  type        = string
-#  default     = "https://github.com/Azure-Samples/nodejs-docs-hello-world" # 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
+#  default     = "https://github.com/Azure-Samples/nodejs-docs-hello-world" # 
 #  description = "Git repository URL used to import web server source code"
 #}
 #variable "branch" {
