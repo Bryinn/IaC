@@ -4,6 +4,7 @@ on:
   push: 
     paths:
       - 'Obliger/brynjari-oppg2/terraform/**'
+  workflow_dispatch:
 
 env:
   ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
@@ -127,10 +128,10 @@ jobs:
         run: curl $(terraform output -raw primary_web_endpoint)
         working-directory: ${{ env.WORKING_DIR }}/${{ matrix.deployed_stacks }}
   
-      - name: Get Web Endpoint
-        id: get_web_endpoint
-        run: echo "WEB_ENDPOINT=$(terraform output -raw ${{primary_web_endpoint}})"
-        working-directory: ${{ env.WORKING_DIR }}/${{ matrix.deployed_stacks }}
+      #- name: Get Web Endpoint
+      #  id: get_web_endpoint
+      #  run: echo "WEB_ENDPOINT=$(terraform output -raw ${{primary_web_endpoint}})"
+      #  working-directory: ${{ env.WORKING_DIR }}/${{ matrix.deployed_stacks }}
   
   
 
