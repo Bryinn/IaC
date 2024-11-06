@@ -56,3 +56,16 @@ resource "azurerm_key_vault_secret" "sa_accesskey" {
   expiration_date = var.expiration_date
   content_type    = "password"
 }
+
+
+resource "azurerm_key_vault_secret" "secrets" {
+  for_each = var.secrets
+
+  name = each.key
+  value = each.value
+  key_vault_id = azurerm_key_vault.kv.id
+  expiration_date = var.expiration_date
+
+  content_type = "password"
+  tags = var.common_tags
+}

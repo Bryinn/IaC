@@ -21,3 +21,6 @@ variable "expiration_date" {
   type        = string
   description = "Expiration date of access key"
 }
+variable "secrets" {
+  type = map(string)
+}
