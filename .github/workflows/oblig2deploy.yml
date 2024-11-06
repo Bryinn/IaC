@@ -50,7 +50,7 @@ jobs:
         working-directory: ${{ env.WORKING_DIR }}/${{ matrix.deployed_stacks }}
         
       - name: Terraform apply dev
-        run: terraform apply -auto-approve -var "${{ var1 }}" -var "${{ var2 }}" -var "${{ var3 }}" -var "${{ var4 }}" -var "${{ var5 }}"
+        run: terraform apply -auto-approve -var "${{ VAR1 }}" -var "${{ VAR2 }}" -var "${{ VAR3 }}" -var "${{ VAR4 }}" -var "${{ VAR5 }}"
         working-directory: ${{ env.WORKING_DIR }}/${{ matrix.deployed_stacks }}
   
       - name: Test dev
@@ -84,7 +84,7 @@ jobs:
         working-directory: ${{ env.WORKING_DIR }}/${{ matrix.deployed_stacks }}
   
       - name: Terraform apply stage
-        run: terraform apply -auto-approve -var "${{ var1 }}" -var "${{ var2 }}" -var "${{ var3 }}" -var "${{ var4 }}" -var "${{ var5 }}"
+        run: terraform apply -auto-approve -var "${{ VAR1 }}" -var "${{ VAR2 }}" -var "${{ VAR3 }}" -var "${{ VAR4 }}" -var "${{ VAR5 }}"
         working-directory: ${{ env.WORKING_DIR }}/${{ matrix.deployed_stacks }}
   
       - name: Test stage
@@ -121,7 +121,7 @@ jobs:
         working-directory: ${{ env.WORKING_DIR }}/${{ matrix.deployed_stacks }}
   
       - name: Terraform apply prod
-        run: terraform apply -auto-approve -var "${{ var1 }}" -var "${{ var2 }}" -var "${{ var3 }}" -var "${{ var4 }}" -var "${{ var5 }}"
+        run: terraform apply -auto-approve -var "${{ VAR1 }}" -var "${{ VAR2 }}" -var "${{ VAR3 }}" -var "${{ VAR4 }}" -var "${{ VAR5 }}"
         working-directory: ${{ env.WORKING_DIR }}/${{ matrix.deployed_stacks }}
   
       - name: Test prod
