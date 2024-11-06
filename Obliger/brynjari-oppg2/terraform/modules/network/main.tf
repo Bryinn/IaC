@@ -24,5 +24,13 @@ resource "azurerm_subnet" "subnets" {
   resource_group_name  = var.rg_name
   virtual_network_name = azurerm_virtual_network.vn.name
   address_prefixes     = var.sub_address_space[count.index]
+  delegation {
+    name = "delegation"
+
+    service_delegation {
+      name    = var.delegations[count.index]
+      actions = ["Microsoft.Network/virtualNetworks/subnets/join/action", "Microsoft.Network/virtualNetworks/subnets/prepareNetworkPolicies/action"]
+    }
+  }
 }
 

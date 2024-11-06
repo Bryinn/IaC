@@ -21,12 +21,12 @@ variable "administrator_creds" {
 # DB conf, these are mapped with each other
 variable "max_size_gb" {
   type        = list(number)
-  default     = 2
+  default = [ 2 ]
   description = "List of database maximum sizes"
 }
 variable "sku_name" {
   type        = list(string)
-  default     = "S0"
+  default     = [ "S0" ]
   description = "list of Sku names used for DB"
 }
 variable "db_names" {

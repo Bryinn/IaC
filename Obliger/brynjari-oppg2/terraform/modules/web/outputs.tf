@@ -7,3 +7,6 @@ output "linux_web_app_name" {
 output "linux_web_app_outbound_ips" {
   value = azurerm_linux_web_app.webapp.outbound_ip_addresses
 }
+#output "web_endpoint_ip" {
+#  value = azurerm_linux_web_app.webapp.
+#}

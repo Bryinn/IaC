@@ -1,3 +1,3 @@
 output "subnet_ouput" {
-  value = azurerm_subnet.subnets
+  value = [ for i in azurerm_subnet.subnets: "${i.id}" ]
 }

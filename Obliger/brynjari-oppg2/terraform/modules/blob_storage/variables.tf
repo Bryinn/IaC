@@ -26,7 +26,7 @@ variable "sa_account_replication" {
 }
 variable "blob_storage_type" {
   type        = string
-  default     = "block"
+  default     = "Block"
   description = "Type of storage for the azure blob"
 }
 variable "sc_access_type" {

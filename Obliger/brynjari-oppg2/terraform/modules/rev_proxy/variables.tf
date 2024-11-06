@@ -17,3 +17,11 @@ variable "common_tags" {
     billing_code = string
   })
 }
+variable "virtual_network_id" {
+  type = string
+  description = "The ID of the Virtual Network within which the Backend Address Pool should exist"
+}
+variable "applications" {
+  type = list(string)
+  description = "names of the applications within the backend pool of the LB"
+}

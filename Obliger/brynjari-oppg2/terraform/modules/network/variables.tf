@@ -33,3 +33,7 @@ variable "sub_address_space_names" {
   type        = list(string)
   description = "Names for the subnets"
 }
+variable "delegations" {
+  type = list(string)
+  description = "Delegations of the subnet if any"
+}

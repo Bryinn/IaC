@@ -10,16 +10,16 @@ variable "instance_name" {
   type        = string
   description = "Naming used in all resources in this module"
 }
-variable "repo_url" {
-  type        = string
-  default     = "https://github.com/Azure-Samples/nodejs-docs-hello-world"
-  description = "Git repository URL used to import web server source code"
-}
-variable "branch" {
-  type        = string
-  default     = "main"
-  description = "The branch of the git repo that will be used for deployment"
-}
+#variable "repo_url" {
+#  type        = string
+#  default     = "https://github.com/Azure-Samples/nodejs-docs-hello-world" # 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
+#  description = "Git repository URL used to import web server source code"
+#}
+#variable "branch" {
+#  type        = string
+#  default     = "main"
+#  description = "The branch of the git repo that will be used for deployment"
+#}
 variable "storage_account_details" {
   type = object({
     access_key   = string
@@ -28,15 +28,19 @@ variable "storage_account_details" {
     type         = string
   })
   sensitive   = true
-  description = "Details from an external storage account to use for blob/file storage for the server"
+  description = "Details from an external storage account to use for blob/file storage for the server. Type must be one of ['AzureBlob' 'AzureFiles']"
+}
+variable "db_name" {
+  type = string
+  description = "Name of the relevant database"
+}
+variable "db_type" {
+  type = string
+  description = "Type of the relevant databse"
 }
 variable "db_connection_string" {
-  type = object({
-    db_name = string
-    type    = string
-    value   = string
-  })
-  description = "Details from an external database server used for the webserver"
+  type = string
+  description = "Connection string for the relevant databse"
 }
 variable "common_tags" {
   type = object({
@@ -44,4 +48,8 @@ variable "common_tags" {
     owner        = string
     billing_code = string
   })
+}
+variable "virtual_network_id" {
+  type = string
+  description = "The Network / subnet used for this application service"
 }
