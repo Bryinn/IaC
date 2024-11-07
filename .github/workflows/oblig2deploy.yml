@@ -14,8 +14,27 @@ env:
   WORKING_DIR: ./Obliger/brynjari-oppg2/terraform  # web_application 
 
 jobs:
+  validate:
+    name: validate
+    runs-on: ubuntu-latest
+    steps:
+        - name: Terraform validate
+          run: terraform validate
+          working-directory: ${{ env.WORKING_DIR }}/${{ matrix.deployed_stacks }}
+
+  fmt:
+    name: fmt
+    needs: validate
+    runs-on: ubuntu-latest
+    steps:
+        - name: Terraform fmt
+          run: terraform fmt
+          working-directory: ${{ env.WORKING_DIR }}/${{ matrix.deployed_stacks }}
+  
+        
   tfsec:
     name: tfsec
+    needs: fmt
     runs-on: ubuntu-latest
 
     steps:
@@ -40,17 +59,9 @@ jobs:
       - name: Terraform workspace select or create dev
         run: terraform workspace select dev || terraform workspace new dev
         working-directory: ${{ env.WORKING_DIR }}/${{ matrix.deployed_stacks }}
-
-      - name: Terraform fmt
-        run: terraform fmt
-        working-directory: ${{ env.WORKING_DIR }}/${{ matrix.deployed_stacks }}
-
-      - name: Terraform validate
-        run: terraform validate
-        working-directory: ${{ env.WORKING_DIR }}/${{ matrix.deployed_stacks }}
         
       - name: Terraform apply dev
-        run: terraform apply -auto-approve -var "${{ vars.VAR1 }}" -var "${{ vars.VAR2 }}" -var "${{ vars.VAR3 }}" -var "${{ vars.VAR4 }}" -var "${{ vars.VAR5 }}"
+        run: terraform apply -auto-approve
         working-directory: ${{ env.WORKING_DIR }}/${{ matrix.deployed_stacks }}
   
       - name: Test dev
@@ -74,17 +85,9 @@ jobs:
       - name: Terraform workspace select or create stage
         run: terraform workspace select ${{ vars.ENV }} || terraform workspace new ${{ vars.ENV }}
         working-directory: ${{ env.WORKING_DIR }}/${{ matrix.deployed_stacks }}
-
-      - name: Terraform fmt
-        run: terraform fmt
-        working-directory: ${{ env.WORKING_DIR }}/${{ matrix.deployed_stacks }}
-
-      - name: Terraform validate
-        run: terraform validate
-        working-directory: ${{ env.WORKING_DIR }}/${{ matrix.deployed_stacks }}
   
       - name: Terraform apply stage
-        run: terraform apply -auto-approve -var "${{ vars.VAR1 }}" -var "${{ vars.VAR2 }}" -var "${{ vars.VAR3 }}" -var "${{ vars.VAR4 }}" -var "${{ vars.VAR5 }}"
+        run: terraform apply -auto-approve
         working-directory: ${{ env.WORKING_DIR }}/${{ matrix.deployed_stacks }}
   
       - name: Test stage
@@ -111,17 +114,9 @@ jobs:
       - name: Terraform workspace select or create prod
         run: terraform workspace select ${{ vars.ENV }} || terraform workspace new ${{ vars.ENV }}
         working-directory: ${{ env.WORKING_DIR }}/${{ matrix.deployed_stacks }}
-
-      - name: Terraform fmt
-        run: terraform fmt
-        working-directory: ${{ env.WORKING_DIR }}/${{ matrix.deployed_stacks }}
-
-      - name: Terraform validate
-        run: terraform validate
-        working-directory: ${{ env.WORKING_DIR }}/${{ matrix.deployed_stacks }}
   
       - name: Terraform apply prod
-        run: terraform apply -auto-approve -var "${{ vars.VAR1 }}" -var "${{ vars.VAR2 }}" -var "${{ vars.VAR3 }}" -var "${{ vars.VAR4 }}" -var "${{ vars.VAR5 }}"
+        run: terraform apply -auto-approve
         working-directory: ${{ env.WORKING_DIR }}/${{ matrix.deployed_stacks }}
   
       - name: Test prod
