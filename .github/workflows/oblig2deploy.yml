@@ -13,54 +13,9 @@ env:
   ARM_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
   WORKING_DIR: ./Obliger/brynjari-oppg2/terraform  # web_application 
 
-jobs:
-  init:
-    name: init
-    runs-on: ubuntu-latest
-    strategy:
-        matrix:
-          deployed_stacks: [web_application]
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-        
-      - name: Terraform init
-        run: terraform init
-        working-directory: ${{ env.WORKING_DIR }}/${{ matrix.deployed_stacks }}
-  validate:
-    name: validate
-    runs-on: ubuntu-latest
-    needs: init
-    strategy:
-        matrix:
-          deployed_stacks: [web_application]
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-        
-      - name: Terraform validate
-        run: terraform validate
-        working-directory: ${{ env.WORKING_DIR }}/${{ matrix.deployed_stacks }}
-
-  fmt:
-    name: fmt
-    needs: validate
-    runs-on: ubuntu-latest
-    strategy:
-        matrix:
-          deployed_stacks: [web_application]
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-        
-      - name: Terraform fmt
-        run: terraform fmt
-        working-directory: ${{ env.WORKING_DIR }}/${{ matrix.deployed_stacks }}
-  
-        
+jobs:        
   tfsec:
     name: tfsec
-    needs: fmt
     runs-on: ubuntu-latest
     strategy:
         matrix:
@@ -80,6 +35,18 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
+
+      - name: Terraform init
+        run: terraform init
+        working-directory: ${{ env.WORKING_DIR }}/${{ matrix.deployed_stacks }}
+
+      - name: Terraform validate
+        run: terraform validate
+        working-directory: ${{ env.WORKING_DIR }}/${{ matrix.deployed_stacks }}
+
+      - name: Terraform fmt
+        run: terraform fmt
+        working-directory: ${{ env.WORKING_DIR }}/${{ matrix.deployed_stacks }}
         
       - name: Terraform workspace select or create dev
         run: terraform workspace select dev || terraform workspace new dev
@@ -102,6 +69,18 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
+
+      - name: Terraform init
+        run: terraform init
+        working-directory: ${{ env.WORKING_DIR }}/${{ matrix.deployed_stacks }}
+
+      - name: Terraform validate
+        run: terraform validate
+        working-directory: ${{ env.WORKING_DIR }}/${{ matrix.deployed_stacks }}
+
+      - name: Terraform fmt
+        run: terraform fmt
+        working-directory: ${{ env.WORKING_DIR }}/${{ matrix.deployed_stacks }}
         
       - name: Terraform workspace select or create stage
         run: terraform workspace select ${{ vars.ENV }} || terraform workspace new ${{ vars.ENV }}
@@ -127,6 +106,18 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
+
+      - name: Terraform init
+        run: terraform init
+        working-directory: ${{ env.WORKING_DIR }}/${{ matrix.deployed_stacks }}
+
+      - name: Terraform validate
+        run: terraform validate
+        working-directory: ${{ env.WORKING_DIR }}/${{ matrix.deployed_stacks }}
+
+      - name: Terraform fmt
+        run: terraform fmt
+        working-directory: ${{ env.WORKING_DIR }}/${{ matrix.deployed_stacks }}
         
       - name: Terraform workspace select or create prod
         run: terraform workspace select ${{ vars.ENV }} || terraform workspace new ${{ vars.ENV }}
