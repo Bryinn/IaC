@@ -20,7 +20,7 @@ variable "common_tags" {
     billing_code = string
   })
   default = {
-    billing_code = "abc123457test2"
+    billing_code = "abc123457test3"
     owner = "brynjari"
     project = "website"
   }
