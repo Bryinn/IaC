@@ -21,12 +21,12 @@ provider "azurerm" {
 
 resource "azurerm_resource_group" "rg_webapp" {
   name     = local.rg_name
-  location = local.location
+  location = var.location
 }
 
 module "network" {
   source                  = "../modules/network"
-  instance_name           = local.common_instance_name
+  instance_name           = var.common_instance_name
   rg_name                 = azurerm_resource_group.rg_webapp.name
   address_space           = ["10.0.0.0/24"]
   sub_address_space       = [["10.0.0.0/25"], ["10.0.0.128/25"]]
@@ -34,7 +34,7 @@ module "network" {
   dns_servers             = ["10.0.0.5", "10.0.0.132"]
   delegations             = ["Microsoft.Web/serverFarms", "Microsoft.Web/serverFarms"]
   location                = azurerm_resource_group.rg_webapp.location
-  common_tags             = local.common_tags
+  common_tags             = var.common_tags
 }
 
 #module "lb" {
@@ -44,7 +44,7 @@ module "network" {
 #  virtual_network_id = module.network.subnet_ouput[0]
 #  instance_name = "webapp"
 #  applications = [ "${module.web.linux_web_app_name}" ]
-#  common_tags = local.common_tags
+#  common_tags = var.common_tags
 #}
 
 resource "random_string" "db_pass" {
@@ -55,37 +55,37 @@ resource "random_string" "db_pass" {
   min_upper = 2
 }
 # Could not make this because it was blocked by firewall for some reason:
-module "vault_vault" {
-  source          = "../modules/key_vault"
-  location        = azurerm_resource_group.rg_webapp.location
-  rg_name         = azurerm_resource_group.rg_webapp.name
-  instance_name   = local.common_instance_name
-  expiration_date = local.expiration_date
-  common_tags     = local.common_tags
-  secrets = {
-    "DBpassword" = random_string.db_pass.result
-  }
-}
+#module "vault_vault" {
+#  source          = "../modules/key_vault"
+#  location        = azurerm_resource_group.rg_webapp.location
+#  rg_name         = azurerm_resource_group.rg_webapp.name
+#  instance_name   = var.common_instance_name
+#  expiration_date = var.expiration_date
+#  common_tags     = var.common_tags
+#  secrets = {
+#    "DBpassword" = random_string.db_pass.result
+#  }
+#}
 
 
 module "db" {
   source      = "../modules/db_mssql"
-  common_tags = local.common_tags
+  common_tags = var.common_tags
   db_names    = ["main"]
   administrator_creds = {
     username = "testmanwithcheese"
-    password = "${module.vault_vault.secrets[0]}"
+    password = "${random_string.db_pass.result}"
   }
   rg_name       = azurerm_resource_group.rg_webapp.name
-  instance_name = local.common_instance_name
+  instance_name = var.common_instance_name
   location      = azurerm_resource_group.rg_webapp.location
 }
 module "blob" {
   source        = "../modules/blob_storage"
   rg_name       = azurerm_resource_group.rg_webapp.name
-  instance_name = local.common_instance_name
+  instance_name = var.common_instance_name
   location      = azurerm_resource_group.rg_webapp.location
-  common_tags   = local.common_tags
+  common_tags   = var.common_tags
   sa_name       = "bloblsa"
 }
 module "web" {
@@ -94,9 +94,9 @@ module "web" {
   db_type              = module.db.type
   db_name              = module.db.db_name[0]
   rg_name              = azurerm_resource_group.rg_webapp.name
-  instance_name        = local.common_instance_name
+  instance_name        = var.common_instance_name
   location             = azurerm_resource_group.rg_webapp.location
-  common_tags          = local.common_tags
+  common_tags          = var.common_tags
   storage_account_details = {
     access_key   = "${module.blob.access_key}"
     share_name   = "${module.blob.share_name}"
