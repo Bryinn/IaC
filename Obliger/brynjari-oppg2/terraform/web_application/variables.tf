@@ -20,7 +20,7 @@ variable "common_tags" {
     billing_code = string
   })
   default = {
-    billing_code = "abc123457test${local.workspace_suffix}"
+    billing_code = "abc123457test"
     owner = "brynjari"
     project = "website"
   }
