@@ -21,9 +21,12 @@ jobs:
         matrix:
           deployed_stacks: [web_application]
     steps:
-        - name: Terraform init
-          run: terraform init
-          working-directory: ${{ env.WORKING_DIR }}/${{ matrix.deployed_stacks }}
+      - name: Checkout
+        uses: actions/checkout@v3
+        
+      - name: Terraform init
+        run: terraform init
+        working-directory: ${{ env.WORKING_DIR }}/${{ matrix.deployed_stacks }}
   validate:
     name: validate
     runs-on: ubuntu-latest
@@ -32,9 +35,12 @@ jobs:
         matrix:
           deployed_stacks: [web_application]
     steps:
-        - name: Terraform validate
-          run: terraform validate
-          working-directory: ${{ env.WORKING_DIR }}/${{ matrix.deployed_stacks }}
+      - name: Checkout
+        uses: actions/checkout@v3
+        
+      - name: Terraform validate
+        run: terraform validate
+        working-directory: ${{ env.WORKING_DIR }}/${{ matrix.deployed_stacks }}
 
   fmt:
     name: fmt
@@ -44,9 +50,12 @@ jobs:
         matrix:
           deployed_stacks: [web_application]
     steps:
-        - name: Terraform fmt
-          run: terraform fmt
-          working-directory: ${{ env.WORKING_DIR }}/${{ matrix.deployed_stacks }}
+      - name: Checkout
+        uses: actions/checkout@v3
+        
+      - name: Terraform fmt
+        run: terraform fmt
+        working-directory: ${{ env.WORKING_DIR }}/${{ matrix.deployed_stacks }}
   
         
   tfsec:
