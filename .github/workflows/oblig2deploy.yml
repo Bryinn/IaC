@@ -14,9 +14,23 @@ env:
   WORKING_DIR: ./Obliger/brynjari-oppg2/terraform  # web_application 
 
 jobs:
+  init:
+    name: init
+    runs-on: ubuntu-latest
+    strategy:
+        matrix:
+          deployed_stacks: [web_application]
+    steps:
+        - name: Terraform init
+          run: terraform init
+          working-directory: ${{ env.WORKING_DIR }}/${{ matrix.deployed_stacks }}
   validate:
     name: validate
     runs-on: ubuntu-latest
+    needs: init
+    strategy:
+        matrix:
+          deployed_stacks: [web_application]
     steps:
         - name: Terraform validate
           run: terraform validate
@@ -26,6 +40,9 @@ jobs:
     name: fmt
     needs: validate
     runs-on: ubuntu-latest
+    strategy:
+        matrix:
+          deployed_stacks: [web_application]
     steps:
         - name: Terraform fmt
           run: terraform fmt
@@ -36,12 +53,15 @@ jobs:
     name: tfsec
     needs: fmt
     runs-on: ubuntu-latest
-
+    strategy:
+        matrix:
+          deployed_stacks: [web_application]
     steps:
       - name: Clone repo
         uses: actions/checkout@master
       - name: tfsec
         uses: aquasecurity/tfsec-action@v1.0.0
+        
   dev_stage:
     strategy:
       matrix:
@@ -51,10 +71,6 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-  
-      - name: Terraform init
-        run: terraform init
-        working-directory: ${{ env.WORKING_DIR }}/${{ matrix.deployed_stacks }}
         
       - name: Terraform workspace select or create dev
         run: terraform workspace select dev || terraform workspace new dev
@@ -77,10 +93,6 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-  
-      - name: Terraform init
-        run: terraform init 
-        working-directory: ${{ env.WORKING_DIR }}/${{ matrix.deployed_stacks }}
         
       - name: Terraform workspace select or create stage
         run: terraform workspace select ${{ vars.ENV }} || terraform workspace new ${{ vars.ENV }}
@@ -106,10 +118,6 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-  
-      - name: Terraform init
-        run: terraform init
-        working-directory: ${{ env.WORKING_DIR }}/${{ matrix.deployed_stacks }}
         
       - name: Terraform workspace select or create prod
         run: terraform workspace select ${{ vars.ENV }} || terraform workspace new ${{ vars.ENV }}
