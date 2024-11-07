@@ -1,5 +1,7 @@
+data "azurerm_client_config" "current" {}
+
 resource "azurerm_storage_account" "sa" {
-  name                     = local.sa_name
+  name                     = "kv${local.sa_name}"
   resource_group_name      = var.rg_name
   location                 = var.location
   account_tier             = "Standard"
@@ -8,7 +10,7 @@ resource "azurerm_storage_account" "sa" {
 }
 
 resource "azurerm_storage_container" "sc" {
-  name                  = "sc-${local.name_conv}"
+  name                  = "sc-kv-${local.name_conv}"
   storage_account_name  = azurerm_storage_account.sa.name
   container_access_type = "private"
 
@@ -16,7 +18,7 @@ resource "azurerm_storage_container" "sc" {
 
 
 resource "azurerm_key_vault" "kv" {
-  name                        = "kv-${local.name_conv}"
+  name                        = "kv-${local.name_conv}-standard"
   location                    = var.location
   resource_group_name         = var.rg_name
   enabled_for_disk_encryption = true
@@ -50,7 +52,7 @@ resource "azurerm_key_vault" "kv" {
 }
 
 resource "azurerm_key_vault_secret" "sa_accesskey" {
-  name            = "access-key-kv-sa"
+  name            = "access-key-kv-sa-standard"
   value           = azurerm_storage_account.sa.primary_access_key
   key_vault_id    = azurerm_key_vault.kv.id
   expiration_date = var.expiration_date

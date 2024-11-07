@@ -24,10 +24,6 @@ resource "azurerm_resource_group" "rg_webapp" {
   location = var.location
 }
 
-data "terraform_remote_state" "global" {
-  backend = "remote"
-}
-
 module "network" {
   source                  = "../modules/network"
   instance_name           = var.common_instance_name
@@ -51,17 +47,25 @@ module "network" {
 #  common_tags = var.common_tags
 #}
 
-module "vault_vault" {
-  source          = "../modules/key_vault"
-  location        = azurerm_resource_group.rg_webapp.location
-  rg_name         = azurerm_resource_group.rg_webapp.name
-  instance_name   = var.common_instance_name
-  expiration_date = var.expiration_date
-  common_tags     = var.common_tags
-  secrets = {
-    "DBpassword" = "${random_password.db_pass}"
-  }
+resource "random_string" "db_pass" {
+  length = 16
+  min_lower = 2
+  min_numeric = 2
+  min_special = 2
+  min_upper = 2
 }
+# Could not make this because it was blocked by firewall for some reason:
+#module "vault_vault" {
+#  source          = "../modules/key_vault"
+#  location        = azurerm_resource_group.rg_webapp.location
+#  rg_name         = azurerm_resource_group.rg_webapp.name
+#  instance_name   = var.common_instance_name
+#  expiration_date = var.expiration_date
+#  common_tags     = var.common_tags
+#  secrets = {
+#    "DBpassword" = random_string.db_pass.result
+#  }
+#}
 
 
 module "db" {
@@ -70,7 +74,7 @@ module "db" {
   db_names    = ["main"]
   administrator_creds = {
     username = "testmanwithcheese"
-    password = "${module.vault_vault.secrets[0]}"
+    password = random_string.db_pass.result
   }
   rg_name       = azurerm_resource_group.rg_webapp.name
   instance_name = var.common_instance_name

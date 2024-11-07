@@ -17,3 +17,7 @@ variable "common_tags" {
     billing_code = string
   })
 }
+variable "expiration_date" {
+  type        = string
+  description = "Expiration date of access keyfor key vault"
+}
