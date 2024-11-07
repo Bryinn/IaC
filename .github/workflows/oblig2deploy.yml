@@ -50,7 +50,7 @@ jobs:
         working-directory: ${{ env.WORKING_DIR }}/${{ matrix.deployed_stacks }}
         
       - name: Terraform apply dev
-        run: terraform apply -auto-approve -var "${{ var1 }}" -var "${{ var2 }}" -var "${{ var3 }}" -var "${{ var4 }}" -var "${{ var5 }}"
+        run: terraform apply -auto-approve -var "${{ vars.VAR1 }}" -var "${{ vars.VAR2 }}" -var "${{ vars.VAR3 }}" -var "${{ vars.VAR4 }}" -var "${{ vars.VAR5 }}"
         working-directory: ${{ env.WORKING_DIR }}/${{ matrix.deployed_stacks }}
   
       - name: Test dev
@@ -59,7 +59,7 @@ jobs:
   stage_prod:
     strategy:
         matrix:
-          deployed_stacks: [web_application, global]
+          deployed_stacks: [web_application]
     needs: tfsec
     runs-on: ubuntu-latest
     environment: stage
@@ -84,7 +84,7 @@ jobs:
         working-directory: ${{ env.WORKING_DIR }}/${{ matrix.deployed_stacks }}
   
       - name: Terraform apply stage
-        run: terraform apply -auto-approve -var "${{ var1 }}" -var "${{ var2 }}" -var "${{ var3 }}" -var "${{ var4 }}" -var "${{ var5 }}"
+        run: terraform apply -auto-approve -var "${{ vars.VAR1 }}" -var "${{ vars.VAR2 }}" -var "${{ vars.VAR3 }}" -var "${{ vars.VAR4 }}" -var "${{ vars.VAR5 }}"
         working-directory: ${{ env.WORKING_DIR }}/${{ matrix.deployed_stacks }}
   
       - name: Test stage
@@ -94,7 +94,7 @@ jobs:
   prod:
     strategy:
         matrix:
-          deployed_stacks: [web_application, global]
+          deployed_stacks: [web_application]
     needs: stage_prod
     runs-on: ubuntu-latest
     environment:
@@ -121,7 +121,7 @@ jobs:
         working-directory: ${{ env.WORKING_DIR }}/${{ matrix.deployed_stacks }}
   
       - name: Terraform apply prod
-        run: terraform apply -auto-approve -var "${{ var1 }}" -var "${{ var2 }}" -var "${{ var3 }}" -var "${{ var4 }}" -var "${{ var5 }}"
+        run: terraform apply -auto-approve -var "${{ vars.VAR1 }}" -var "${{ vars.VAR2 }}" -var "${{ vars.VAR3 }}" -var "${{ vars.VAR4 }}" -var "${{ vars.VAR5 }}"
         working-directory: ${{ env.WORKING_DIR }}/${{ matrix.deployed_stacks }}
   
       - name: Test prod
