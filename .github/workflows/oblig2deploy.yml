@@ -4,6 +4,7 @@ on:
   push: 
     paths:
       - 'Obliger/brynjari-oppg2/terraform/**'
+  pull_request:
   workflow_dispatch:
 
 env:
